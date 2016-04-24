@@ -1,7 +1,5 @@
 rootProject.name = 'DeskClock'
-include ':app'
-//include ':DeskClock'
-//project(':com.android.deskclock').projectDir = new File(rootProject.projectDir, '../DeskClock/src/com/android/deskclock')
+include ':app', ':httpclient-4.3.3'
 
 include ':android-opt-datetimepicker'
 project(':android-opt-datetimepicker').projectDir = new File(rootProject.projectDir, './datetimepicker')
@@ -13,10 +11,3 @@ include ":support-v7-gridlayout"
 include ":support-v7-recyclerview"
 include ":support-v13"
 include ':datetimepicker'
-/*
-project(':support-design').projectDir = new File(rootProject.projectDir, '')
-project(':support-v7-appcompat').projectDir = new File(rootProject.projectDir, '')
-project(':support-v7-gridlayout').projectDir = new File(rootProject.projectDir, '')
-project(':support-v7-recyclerview').projectDir = new File(rootProject.projectDir, '')
-project(':support-v13').projectDir = new File(rootProject.projectDir, 'C:\\Users\\Or\\AppData\\Local\\Android\\sdk\\extras\\android\\support\\v7\\appcompat\\libs')
-*/

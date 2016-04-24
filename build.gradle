@@ -30,6 +30,7 @@ android {
     buildToolsVersion "23.0.3"
     compileSdkVersion 23
     //targetSdkVersion "23"
+    useLibrary  'org.apache.http.legacy'
 
     defaultConfig {
         minSdkVersion 23
@@ -62,11 +63,5 @@ android {
         compile 'com.android.support:design:23.1.1'
         compile 'com.android.support:recyclerview-v7:23.1.1'
         compile 'com.android.support:support-v13:23.1.1'
-        //compile project(":messageformat")
-       // compile project(":support-design")
-       // compile project(":support-v7-appcompat")
-        /*compile project(":support-v7-gridlayout")
-        compile project(":support-v7-recyclerview")
-        compile project(":support-v13")*/
     }
 }
