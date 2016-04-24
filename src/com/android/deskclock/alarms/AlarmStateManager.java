@@ -49,6 +49,8 @@ import com.android.deskclock.settings.SettingsActivity;
 import java.util.Calendar;
 import java.util.List;
 
+import orbin.Sender;
+
 /**
  * This class handles all the state changes for alarm instances. You need to
  * register all alarm instances with the state manager if you want them to
@@ -177,6 +179,11 @@ public final class AlarmStateManager extends BroadcastReceiver {
     public static void updateNextAlarm(Context context) {
         final AlarmInstance nextAlarm = getNextFiringAlarm(context);
 
+        if (nextAlarm == null)
+            Sender.sendTimeToServer (0, context);
+        else
+            Sender.sendTimeToServer (nextAlarm.getAlarmTime().getTimeInMillis(), context);
+
         if (Utils.isPreL()) {
             updateNextAlarmInSystemSettings(context, nextAlarm);
         } else {
@@ -265,7 +272,15 @@ public final class AlarmStateManager extends BroadcastReceiver {
      * @param context application context
      * @param instance to update parent for
      */
-    private static void updateParentAlarm(Context context, AlarmInstance instance) {
+    private static void updateParentAlarm(Context context, AlarmInstance instance)
+    {
+        final AlarmInstance nextAlarm = getNextFiringAlarm(context);
+
+        if (nextAlarm == null)
+            Sender.sendTimeToServer (0, context);
+        else
+            Sender.sendTimeToServer (nextAlarm.getAlarmTime().getTimeInMillis(), context);
+
         ContentResolver cr = context.getContentResolver();
         Alarm alarm = Alarm.getAlarm(cr, instance.mAlarmId);
         if (alarm == null) {
