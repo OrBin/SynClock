@@ -17,7 +17,7 @@ public class Sender {
     private static String getSetTimePageUrl (Context context)
     {
         // This line depends on the constant orbin.Path.BASE_PATH.
-        // It is declared in the file Sender.java, which is ignored by git.
+        // It is declared in the file Path.java, which is ignored by git.
         return Path.BASE_PATH + "/set_time.php?time=";
     }
 
