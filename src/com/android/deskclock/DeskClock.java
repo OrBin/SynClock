@@ -137,9 +137,9 @@ public class DeskClock extends BaseActivity
         setVolumeControlStream(AudioManager.STREAM_ALARM);
 
         if (icicle != null) {
-            mSelectedTab = icicle.getInt(KEY_SELECTED_TAB, CLOCK_TAB_INDEX);
+            mSelectedTab = icicle.getInt(KEY_SELECTED_TAB, ALARM_TAB_INDEX);
         } else {
-            mSelectedTab = CLOCK_TAB_INDEX;
+            mSelectedTab = ALARM_TAB_INDEX;
 
             // Set the background color to initially match the theme value so that we can
             // smoothly transition to the dynamic color.
