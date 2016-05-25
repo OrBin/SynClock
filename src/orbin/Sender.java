@@ -21,7 +21,7 @@ public class Sender {
         return Path.BASE_PATH + "/set_time.php?time=";
     }
 
-    private static boolean writeTimeToServer (long timeToWrite, Context context) throws ClientProtocolException, IOException
+    private static boolean writeTimeToServer (long timeToWrite, Context context) throws IOException
     {
 
         HttpClient httpclient = new DefaultHttpClient();
