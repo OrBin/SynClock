@@ -243,10 +243,8 @@ public final class AlarmNotifications {
     public static void updateNotification(Context context, AlarmInstance instance) {
         switch (instance.mAlarmState) {
             case AlarmInstance.LOW_NOTIFICATION_STATE:
-                showLowPriorityNotification(context, instance);
-                break;
             case AlarmInstance.HIGH_NOTIFICATION_STATE:
-                showHighPriorityNotification(context, instance);
+                LogUtils.d("Ignoring upcoming alarm notification");
                 break;
             case AlarmInstance.SNOOZE_STATE:
                 showSnoozeNotification(context, instance);

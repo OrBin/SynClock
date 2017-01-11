@@ -380,27 +380,6 @@ public final class AlarmStateManager extends BroadcastReceiver {
                 instance, AlarmInstance.LOW_NOTIFICATION_STATE);
     }
 
-    /**
-     * This will set the alarm instance to the LOW_NOTIFICATION_STATE and update
-     * the application notifications and schedule any state changes that need
-     * to occur in the future.
-     *
-     * @param context application context
-     * @param instance to set state to
-     */
-    public static void setLowNotificationState(Context context, AlarmInstance instance) {
-        LogUtils.i("Setting low notification state to instance " + instance.mId);
-
-        // Update alarm state in db
-        ContentResolver contentResolver = context.getContentResolver();
-        instance.mAlarmState = AlarmInstance.LOW_NOTIFICATION_STATE;
-        AlarmInstance.updateInstance(contentResolver, instance);
-
-        // Setup instance notification and scheduling timers
-        AlarmNotifications.showLowPriorityNotification(context, instance);
-        scheduleInstanceStateChange(context, instance.getHighNotificationTime(),
-                instance, AlarmInstance.HIGH_NOTIFICATION_STATE);
-    }
 
     /**
      * This will set the alarm instance to the HIDE_NOTIFICATION_STATE and update
@@ -422,28 +401,6 @@ public final class AlarmStateManager extends BroadcastReceiver {
         AlarmNotifications.clearNotification(context, instance);
         scheduleInstanceStateChange(context, instance.getHighNotificationTime(),
                 instance, AlarmInstance.HIGH_NOTIFICATION_STATE);
-    }
-
-    /**
-     * This will set the alarm instance to the HIGH_NOTIFICATION_STATE and update
-     * the application notifications and schedule any state changes that need
-     * to occur in the future.
-     *
-     * @param context application context
-     * @param instance to set state to
-     */
-    public static void setHighNotificationState(Context context, AlarmInstance instance) {
-        LogUtils.i("Setting high notification state to instance " + instance.mId);
-
-        // Update alarm state in db
-        ContentResolver contentResolver = context.getContentResolver();
-        instance.mAlarmState = AlarmInstance.HIGH_NOTIFICATION_STATE;
-        AlarmInstance.updateInstance(contentResolver, instance);
-
-        // Setup instance notification and scheduling timers
-        AlarmNotifications.showHighPriorityNotification(context, instance);
-        scheduleInstanceStateChange(context, instance.getAlarmTime(),
-                instance, AlarmInstance.FIRED_STATE);
     }
 
     /**
@@ -750,14 +707,10 @@ public final class AlarmStateManager extends BroadcastReceiver {
             AlarmNotifications.showSnoozeNotification(context, instance);
             scheduleInstanceStateChange(context, instance.getAlarmTime(),
                     instance, AlarmInstance.FIRED_STATE);
-        } else if (currentTime.after(highNotificationTime)) {
-            setHighNotificationState(context, instance);
-        } else if (currentTime.after(lowNotificationTime)) {
+        } else if ((!currentTime.after(highNotificationTime)) && (currentTime.after(lowNotificationTime))) {
             // Only show low notification if it wasn't hidden in the past
             if (instance.mAlarmState == AlarmInstance.HIDE_NOTIFICATION_STATE) {
                 setHideNotificationState(context, instance);
-            } else {
-                setLowNotificationState(context, instance);
             }
         } else {
           // Alarm is still active, so initialize as a silent alarm
@@ -859,13 +812,13 @@ public final class AlarmStateManager extends BroadcastReceiver {
                 setSilentState(context, instance);
                 break;
             case AlarmInstance.LOW_NOTIFICATION_STATE:
-                setLowNotificationState(context, instance);
+                
                 break;
             case AlarmInstance.HIDE_NOTIFICATION_STATE:
                 setHideNotificationState(context, instance);
                 break;
             case AlarmInstance.HIGH_NOTIFICATION_STATE:
-                setHighNotificationState(context, instance);
+                
                 break;
             case AlarmInstance.FIRED_STATE:
                 setFiredState(context, instance);
