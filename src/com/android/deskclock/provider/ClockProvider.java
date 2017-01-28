@@ -16,19 +16,23 @@
 
 package com.android.deskclock.provider;
 
+import android.annotation.TargetApi;
 import android.content.ContentProvider;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.ArrayMap;
 
 import com.android.deskclock.LogUtils;
+import com.android.deskclock.Utils;
 
 import java.util.Map;
 
@@ -114,8 +118,23 @@ public class ClockProvider extends ContentProvider {
     }
 
     @Override
+    @TargetApi(Build.VERSION_CODES.N)
     public boolean onCreate() {
-        mOpenHelper = new ClockDatabaseHelper(getContext());
+        final Context context = getContext();
+        final Context storageContext;
+        if (Utils.isNOrLater()) {
+            // All N devices have split storage areas, but we may need to
+            // migrate existing database into the new device encrypted
+            // storage area, which is where our data lives from now on.
+            storageContext = context.createDeviceProtectedStorageContext();
+            if (!storageContext.moveDatabaseFrom(context, ClockDatabaseHelper.DATABASE_NAME)) {
+                LogUtils.wtf("Failed to migrate database: %s", ClockDatabaseHelper.DATABASE_NAME);
+            }
+        } else {
+            storageContext = context;
+        }
+
+        mOpenHelper = new ClockDatabaseHelper(storageContext);
         return true;
     }
 
@@ -223,7 +242,7 @@ public class ClockProvider extends ContentProvider {
                 throw new IllegalArgumentException("Cannot insert from URI: " + uri);
         }
 
-        Uri uriResult = ContentUris.withAppendedId(AlarmsColumns.CONTENT_URI, rowId);
+        Uri uriResult = ContentUris.withAppendedId(uri, rowId);
         notifyChange(getContext().getContentResolver(), uriResult);
         return uriResult;
     }

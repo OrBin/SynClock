@@ -16,7 +16,10 @@
 
 package com.android.deskclock.data;
 
+import android.net.Uri;
 import android.os.SystemClock;
+
+import com.android.deskclock.provider.ClockContract;
 
 import static com.android.deskclock.data.Stopwatch.State.PAUSED;
 import static com.android.deskclock.data.Stopwatch.State.RESET;
@@ -28,6 +31,12 @@ import static com.android.deskclock.data.Stopwatch.State.RUNNING;
 public final class Stopwatch {
 
     public enum State { RESET, RUNNING, PAUSED }
+
+    /**
+     * The content:// style URI for the stopwatch.
+     */
+    public static final Uri CONTENT_URI =
+            Uri.parse("content://" + ClockContract.AUTHORITY + "/stopwatch");
 
     /** The single, immutable instance of a reset stopwatch. */
     private static final Stopwatch RESET_STOPWATCH = new Stopwatch(RESET, Long.MIN_VALUE, 0);
@@ -47,6 +56,10 @@ public final class Stopwatch {
         mAccumulatedTime = accumulatedTime;
     }
 
+    public Uri getContentUri() {
+        return CONTENT_URI;
+    }
+
     public State getState() { return mState; }
     public long getLastStartTime() { return mLastStartTime; }
     public boolean isReset() { return mState == RESET; }
@@ -61,13 +74,17 @@ public final class Stopwatch {
             return mAccumulatedTime;
         }
 
-        return mAccumulatedTime + (now() - mLastStartTime);
+        // In practice, "now" can be any value due to device reboots. When the real-time clock
+        // is reset, there is no more guarantee that "now" falls after the last start time. To
+        // ensure the stopwatch is monotonically increasing, normalize negative time segments to 0,
+        final long timeSinceStart = now() - mLastStartTime;
+        return mAccumulatedTime + Math.max(0, timeSinceStart);
     }
 
     /**
      * @return the amount of time accumulated up to the last time the stopwatch was started
      */
-    long getAccumulatedTime() {
+    public long getAccumulatedTime() {
         return mAccumulatedTime;
     }
 
@@ -79,7 +96,7 @@ public final class Stopwatch {
             return this;
         }
 
-        return new Stopwatch(RUNNING, now(), mAccumulatedTime);
+        return new Stopwatch(RUNNING, now(), getTotalTime());
     }
 
     /**
@@ -90,8 +107,7 @@ public final class Stopwatch {
             return this;
         }
 
-        final long accumulatedTime = mAccumulatedTime + (now() - mLastStartTime);
-        return new Stopwatch(PAUSED, Long.MIN_VALUE, accumulatedTime);
+        return new Stopwatch(PAUSED, Long.MIN_VALUE, getTotalTime());
     }
 
     /**

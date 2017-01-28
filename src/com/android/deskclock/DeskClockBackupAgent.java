@@ -24,7 +24,6 @@ import android.app.backup.BackupDataOutput;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.ParcelFileDescriptor;
 import android.os.SystemClock;
@@ -42,12 +41,12 @@ import java.util.List;
 
 public class DeskClockBackupAgent extends BackupAgent {
 
+    private static final LogUtils.Logger LOGGER = new LogUtils.Logger("DeskClockBackupAgent");
+
     private static final String KEY_RESTORE_FINISHED = "restore_finished";
 
     public static final String ACTION_COMPLETE_RESTORE =
             "com.android.deskclock.action.COMPLETE_RESTORE";
-
-    private static final String TAG = "DeskClockBackupAgent";
 
     @Override
     public void onBackup(ParcelFileDescriptor oldState, BackupDataOutput data,
@@ -83,20 +82,14 @@ public class DeskClockBackupAgent extends BackupAgent {
      */
     @Override
     public void onRestoreFinished() {
-        // Write a preference to indicate a data restore has been completed.
-        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        prefs.edit().putBoolean(KEY_RESTORE_FINISHED, true).apply();
-
-        // If device boot is not yet completed, use ACTION_BOOT_COMPLETED to trigger completion of
-        // the data restore process at a safer time.
-        if (registerReceiver(null, new IntentFilter(Intent.ACTION_BOOT_COMPLETED)) != null) {
-            LogUtils.i(TAG, "Waiting for %s to complete the data restore",
-                    Intent.ACTION_BOOT_COMPLETED);
-            return;
+        if (Utils.isNOrLater()) {
+            // TODO: migrate restored database and preferences over into
+            // the device-encrypted storage area
         }
 
-        // Otherwise, the device is already booted, so schedule a custom broadcast to start the
-        // application in 10 seconds.
+        // Write a preference to indicate a data restore has been completed.
+        final SharedPreferences prefs = Utils.getDefaultSharedPreferences(this);
+        prefs.edit().putBoolean(KEY_RESTORE_FINISHED, true).apply();
 
         // Create an Intent to send into DeskClock indicating restore is complete.
         final PendingIntent restoreIntent = PendingIntent.getBroadcast(this, 0,
@@ -110,7 +103,7 @@ public class DeskClockBackupAgent extends BackupAgent {
         final AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtMillis, restoreIntent);
 
-        LogUtils.i(TAG, "Waiting for %s to complete the data restore", ACTION_COMPLETE_RESTORE);
+        LOGGER.i("Waiting for %s to complete the data restore", ACTION_COMPLETE_RESTORE);
     }
 
     /**
@@ -119,12 +112,12 @@ public class DeskClockBackupAgent extends BackupAgent {
      */
     public static boolean processRestoredData(Context context) {
         // If the preference indicates data was not recently restored, there is nothing to do.
-        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        final SharedPreferences prefs = Utils.getDefaultSharedPreferences(context);
         if (!prefs.getBoolean(KEY_RESTORE_FINISHED, false)) {
             return false;
         }
 
-        LogUtils.i(TAG, "processRestoredData() started");
+        LOGGER.i("processRestoredData() started");
 
         // Now that alarms have been restored, schedule new instances in AlarmManager.
         final ContentResolver contentResolver = context.getContentResolver();
@@ -145,14 +138,14 @@ public class DeskClockBackupAgent extends BackupAgent {
 
                 // Schedule the next alarm instance in AlarmManager.
                 AlarmStateManager.registerInstance(context, alarmInstance, true);
-                LogUtils.i(TAG, "DeskClockBackupAgent scheduled alarm instance: %s", alarmInstance);
+                LOGGER.i("DeskClockBackupAgent scheduled alarm instance: %s", alarmInstance);
             }
         }
 
         // Remove the preference to avoid executing this logic multiple times.
         prefs.edit().remove(KEY_RESTORE_FINISHED).apply();
 
-        LogUtils.i(TAG, "processRestoredData() completed");
+        LOGGER.i("processRestoredData() completed");
         return true;
     }
 }
