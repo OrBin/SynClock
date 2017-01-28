@@ -84,6 +84,7 @@ import static android.support.v4.view.ViewPager.SCROLL_STATE_SETTLING;
 import static android.text.format.DateUtils.SECOND_IN_MILLIS;
 import static orbin.deskclock.AnimatorUtils.getAlphaAnimator;
 import static orbin.deskclock.AnimatorUtils.getScaleAnimator;
+import static orbin.deskclock.uidata.UiDataModel.Tab.ALARMS;
 
 /**
  * The main activity of the application which displays 4 different tabs contains alarms, world
@@ -304,6 +305,8 @@ public class DeskClock extends BaseActivity
             final int backgroundColor = ContextCompat.getColor(this, R.color.default_background);
             adjustAppColor(backgroundColor, false /* animate */);
         }
+
+        UiDataModel.getUiDataModel().setSelectedTab(ALARMS);
     }
 
     @Override
