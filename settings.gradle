@@ -1,3 +1,5 @@
+
+
 rootProject.name = 'DeskClock'
 include ':app', ':httpclient-4.3.3'
 
@@ -10,4 +12,6 @@ include ":support-v7-appcompat"
 include ":support-v7-gridlayout"
 include ":support-v7-recyclerview"
 include ":support-v13"
+include ":support-v14"
+include ":support-v14-appcompat"
 include ':datetimepicker'
