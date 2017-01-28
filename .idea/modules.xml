@@ -11,6 +11,7 @@
       <module fileurl="file://$PROJECT_DIR$/support-design/support-design.iml" filepath="$PROJECT_DIR$/support-design/support-design.iml" />
       <module fileurl="file://$PROJECT_DIR$/support-v13/support-v13.iml" filepath="$PROJECT_DIR$/support-v13/support-v13.iml" />
       <module fileurl="file://$PROJECT_DIR$/support-v14/support-v14.iml" filepath="$PROJECT_DIR$/support-v14/support-v14.iml" />
+      <module fileurl="file://$PROJECT_DIR$/support-v14-appcompat/support-v14-appcompat.iml" filepath="$PROJECT_DIR$/support-v14-appcompat/support-v14-appcompat.iml" />
       <module fileurl="file://$PROJECT_DIR$/support-v7-appcompat/support-v7-appcompat.iml" filepath="$PROJECT_DIR$/support-v7-appcompat/support-v7-appcompat.iml" />
       <module fileurl="file://$PROJECT_DIR$/support-v7-gridlayout/support-v7-gridlayout.iml" filepath="$PROJECT_DIR$/support-v7-gridlayout/support-v7-gridlayout.iml" />
       <module fileurl="file://$PROJECT_DIR$/support-v7-recyclerview/support-v7-recyclerview.iml" filepath="$PROJECT_DIR$/support-v7-recyclerview/support-v7-recyclerview.iml" />

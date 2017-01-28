@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom">
 
-            <com.android.deskclock.widget.EllipsizeLayout
+            <orbin.deskclock.widget.EllipsizeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
@@ -88,7 +88,7 @@
                     android:textSize="@dimen/alarm_text_font_size"
                     android:textStyle="bold" />
 
-            </com.android.deskclock.widget.EllipsizeLayout>
+            </orbin.deskclock.widget.EllipsizeLayout>
 
             <ImageButton
                 android:id="@+id/arrow"

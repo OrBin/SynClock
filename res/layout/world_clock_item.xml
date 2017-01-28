@@ -24,7 +24,7 @@
         android:layout_height="match_parent"
         android:layout_weight="@integer/gutter_width_percent" />
 
-    <com.android.deskclock.widget.EllipsizeLayout
+    <orbin.deskclock.widget.EllipsizeLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="@integer/guttered_content_width_percent"
@@ -61,7 +61,7 @@
                 android:singleLine="true"
                 android:textColor="@color/clock_white" />
 
-            <com.android.deskclock.AnalogClock
+            <orbin.deskclock.AnalogClock
                 android:id="@+id/analog_clock"
                 android:layout_width="@dimen/world_clock_analog_size"
                 android:layout_height="@dimen/world_clock_analog_size"
@@ -70,7 +70,7 @@
 
         </FrameLayout>
 
-    </com.android.deskclock.widget.EllipsizeLayout>
+    </orbin.deskclock.widget.EllipsizeLayout>
 
     <!-- Right gutter. -->
     <Space

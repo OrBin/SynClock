@@ -33,7 +33,7 @@
         android:orientation="vertical"
         android:paddingBottom="@dimen/fab_height">
 
-        <com.android.deskclock.timer.TimerView
+        <orbin.deskclock.timer.TimerView
             android:id="@+id/timer_time_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -53,7 +53,7 @@
                 android:scaleType="center"
                 app:srcCompat="@drawable/ic_backspace" />
 
-        </com.android.deskclock.timer.TimerView>
+        </orbin.deskclock.timer.TimerView>
 
         <View
             android:id="@+id/divider"

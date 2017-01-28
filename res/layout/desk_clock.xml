@@ -57,7 +57,7 @@
 
         <include layout="@layout/drop_shadow" />
 
-        <com.android.deskclock.widget.RtlViewPager
+        <orbin.deskclock.widget.RtlViewPager
             android:id="@+id/desk_clock_pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
@@ -70,7 +70,7 @@
         android:layout_gravity="bottom"
         android:baselineAligned="false"
         android:orientation="horizontal"
-        app:layout_behavior="com.android.deskclock.widget.toast.LinearLayoutWithSnackbarBehavior">
+        app:layout_behavior="orbin.deskclock.widget.toast.LinearLayoutWithSnackbarBehavior">
 
         <FrameLayout
             android:layout_width="0dp"

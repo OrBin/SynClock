@@ -42,7 +42,7 @@
                 android:textColor="@color/clock_white"
                 android:textSize="@dimen/world_clock_digital_font_size" />
 
-            <com.android.deskclock.AnalogClock
+            <orbin.deskclock.AnalogClock
                 android:id="@+id/analog_clock"
                 android:layout_width="@dimen/world_clock_analog_size"
                 android:layout_height="@dimen/world_clock_analog_size"

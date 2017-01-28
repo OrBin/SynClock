@@ -17,12 +17,12 @@
 <!-- Sufficient space exists to include the bounding stopwatch circle. -->
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <com.android.deskclock.timer.CountingTimerView
+    <orbin.deskclock.timer.CountingTimerView
         android:id="@+id/stopwatch_time_text"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <com.android.deskclock.stopwatch.StopwatchCircleView
+    <orbin.deskclock.stopwatch.StopwatchCircleView
         android:id="@+id/stopwatch_time"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

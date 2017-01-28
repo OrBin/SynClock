@@ -15,7 +15,7 @@
 -->
 
 <!-- This TimerItem includes the circle because ample space exists. -->
-<com.android.deskclock.timer.TimerItem
+<orbin.deskclock.timer.TimerItem
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -28,23 +28,23 @@
         android:layout_weight="1"
         android:layout_gravity="center">
 
-        <com.android.deskclock.TimerCircleFrameLayout
+        <orbin.deskclock.TimerCircleFrameLayout
             app:layout_aspectRatio="100%"
             app:layout_widthPercent="@fraction/timer_circle_width_percent"
             app:layout_heightPercent="@fraction/timer_circle_height_percent"
             android:layout_gravity="center">
 
-            <com.android.deskclock.CircleButtonsLayout
+            <orbin.deskclock.CircleButtonsLayout
                 android:id="@+id/timer_circle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <com.android.deskclock.timer.TimerCircleView
+                <orbin.deskclock.timer.TimerCircleView
                     android:id="@+id/timer_time"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
-                <com.android.deskclock.timer.CountingTimerView
+                <orbin.deskclock.timer.CountingTimerView
                     android:id="@+id/timer_time_text"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
@@ -73,9 +73,9 @@
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/ic_plusone" />
 
-            </com.android.deskclock.CircleButtonsLayout>
+            </orbin.deskclock.CircleButtonsLayout>
 
-        </com.android.deskclock.TimerCircleFrameLayout>
+        </orbin.deskclock.TimerCircleFrameLayout>
 
     </android.support.percent.PercentFrameLayout>
 
@@ -83,4 +83,4 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/fab_height" />
 
-</com.android.deskclock.timer.TimerItem>
+</orbin.deskclock.timer.TimerItem>

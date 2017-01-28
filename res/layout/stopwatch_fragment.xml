@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center">
 
-        <com.android.deskclock.TimerCircleFrameLayout
+        <orbin.deskclock.TimerCircleFrameLayout
             app:layout_aspectRatio="100%"
             app:layout_widthPercent="@fraction/timer_circle_width_percent"
             app:layout_heightPercent="@fraction/timer_circle_height_percent"
@@ -36,7 +36,7 @@
 
             <include layout="@layout/stopwatch_view" />
 
-        </com.android.deskclock.TimerCircleFrameLayout>
+        </orbin.deskclock.TimerCircleFrameLayout>
 
     </android.support.percent.PercentFrameLayout>
 
