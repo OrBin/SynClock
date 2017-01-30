@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/DeskClock.iml" filepath="$PROJECT_DIR$/DeskClock.iml" />
+      <module fileurl="file://$PROJECT_DIR$/datetimepicker/android-opt-datetimepicker.iml" filepath="$PROJECT_DIR$/datetimepicker/android-opt-datetimepicker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/datetimepicker/datetimepicker.iml" filepath="$PROJECT_DIR$/datetimepicker/datetimepicker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/httpclient-4.3.3/httpclient-4.3.3.iml" filepath="$PROJECT_DIR$/httpclient-4.3.3/httpclient-4.3.3.iml" />
+      <module fileurl="file://$PROJECT_DIR$/messageformat/messageformat.iml" filepath="$PROJECT_DIR$/messageformat/messageformat.iml" />
+      <module fileurl="file://$PROJECT_DIR$/support-design/support-design.iml" filepath="$PROJECT_DIR$/support-design/support-design.iml" />
+      <module fileurl="file://$PROJECT_DIR$/support-v13/support-v13.iml" filepath="$PROJECT_DIR$/support-v13/support-v13.iml" />
+      <module fileurl="file://$PROJECT_DIR$/support-v14/support-v14.iml" filepath="$PROJECT_DIR$/support-v14/support-v14.iml" />
+      <module fileurl="file://$PROJECT_DIR$/support-v14-appcompat/support-v14-appcompat.iml" filepath="$PROJECT_DIR$/support-v14-appcompat/support-v14-appcompat.iml" />
+      <module fileurl="file://$PROJECT_DIR$/support-v7-appcompat/support-v7-appcompat.iml" filepath="$PROJECT_DIR$/support-v7-appcompat/support-v7-appcompat.iml" />
+      <module fileurl="file://$PROJECT_DIR$/support-v7-gridlayout/support-v7-gridlayout.iml" filepath="$PROJECT_DIR$/support-v7-gridlayout/support-v7-gridlayout.iml" />
+      <module fileurl="file://$PROJECT_DIR$/support-v7-recyclerview/support-v7-recyclerview.iml" filepath="$PROJECT_DIR$/support-v7-recyclerview/support-v7-recyclerview.iml" />
+    </modules>
+  </component>
+</project>
