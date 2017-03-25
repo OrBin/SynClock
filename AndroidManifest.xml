@@ -19,14 +19,16 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="orbin.deskclock"
-    android:versionCode="452"
-    android:versionName="4.5.2">
+    android:versionCode="453"
+    android:versionName="4.5.3">
 
     <original-package android:name="orbin.alarmclock" />
     <original-package android:name="orbin.deskclock" />
 
     <uses-sdk android:minSdkVersion="25" />
 
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.ACCOUNT_MANAGER" />
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
