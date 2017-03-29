@@ -184,7 +184,7 @@ public class AuthHelper implements GoogleApiClient.OnConnectionFailedListener
         long expiryTimeMillis = sharedPrefs.getLong(ID_TOKEN_EXPIRY_TIME_MILLIS_KEY, 0);
         String idToken = sharedPrefs.getString(ID_TOKEN_KEY, null);
 
-        if ((expiryTimeMillis > System.currentTimeMillis() + DateUtils.SECOND_IN_MILLIS) ||
+        if ((expiryTimeMillis < System.currentTimeMillis() + DateUtils.SECOND_IN_MILLIS) ||
             (idToken == null))
         {
             // If no token is saved, or the token have expired or is about to expire, get a new token

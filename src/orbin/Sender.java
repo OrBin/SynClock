@@ -87,8 +87,6 @@ public class Sender {
                     {
                         Log.e(TAG, "Could not send alarm time to server: IOException thrown (try " + numOfTries + " of " + MAX_TRIES + ")");
                     }
-
-                    numOfTries++;
                 }
 
                 return null;

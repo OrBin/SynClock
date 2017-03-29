@@ -21,7 +21,6 @@ buildscript {
 
     dependencies {
         classpath 'com.android.tools.build:gradle:2.2.3'
-        classpath 'com.google.gms:google-services:3.0.0'
     }
 }
 
@@ -30,7 +29,6 @@ apply plugin: "com.android.application"
 android {
     buildToolsVersion "25.0.2"
     compileSdkVersion 25
-    //targetSdkVersion "25"
     useLibrary  'org.apache.http.legacy'
 
     defaultConfig {
@@ -67,7 +65,4 @@ android {
 
         compile 'com.google.android.gms:play-services-auth:9.8.0'
     }
-
-    apply plugin: 'com.google.gms.google-services'
-
 }
