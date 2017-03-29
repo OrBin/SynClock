@@ -1,0 +1,10 @@
+<!--
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="server_client_id">Your server's client ID (from Google Cloud API Console)</string>
+    <string name="client_secret">Your server's client secret (from Google Cloud API Console)</string>
+    <string name="redirect_uri">Your server's redirect URI (as in Google Cloud API Console)</string>
+
+</resources>
+-->
