@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    This is a template for authstrings.xml file, which should look like this file, with the actual values.
+    The file authstrings.xml should be in the same location as this file, and git-ignored for security reasons.
+ -->
 <resources>
     <!--
         <string name="server_client_id">Your server's client ID (from Google Cloud API Console)</string>
