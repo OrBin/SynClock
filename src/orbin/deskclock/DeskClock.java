@@ -16,13 +16,6 @@
 
 package orbin.deskclock;
 
-import android.Manifest;
-import android.accounts.Account;
-import android.accounts.AccountManager;
-import android.accounts.AccountManagerCallback;
-import android.accounts.AccountManagerFuture;
-import android.accounts.AuthenticatorException;
-import android.accounts.OperationCanceledException;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
@@ -37,13 +30,10 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.database.ContentObserver;
 import android.media.AudioManager;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -54,12 +44,10 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.TabLayout.ViewPagerOnTabSelectedListener;
 import android.support.v13.app.FragmentPagerAdapter;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -69,17 +57,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import orbin.Sender;
+import orbin.AuthHelper;
 import orbin.deskclock.actionbarmenu.MenuItemControllerFactory;
 import orbin.deskclock.actionbarmenu.NightModeMenuItemController;
 import orbin.deskclock.actionbarmenu.OptionsMenuManager;
@@ -109,41 +87,13 @@ import static orbin.deskclock.AnimatorUtils.getAlphaAnimator;
 import static orbin.deskclock.AnimatorUtils.getScaleAnimator;
 import static orbin.deskclock.uidata.UiDataModel.Tab.ALARMS;
 
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.OptionalPendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.utils.URLEncodedUtils;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.HttpParams;
-import org.apache.http.util.EntityUtils;
-/*import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
-*/
-
 /**
  * The main activity of the application which displays 4 different tabs contains alarms, world
  * clocks, timers and a stopwatch.
  */
 public class DeskClock extends BaseActivity
         implements FabContainer,
-                   LabelDialogFragment.AlarmLabelDialogHandler,
-                   GoogleApiClient.OnConnectionFailedListener {
+                   LabelDialogFragment.AlarmLabelDialogHandler {
 
     private static final int RC_SIGN_IN = 9002;
 
@@ -362,57 +312,10 @@ public class DeskClock extends BaseActivity
 
         UiDataModel.getUiDataModel().setSelectedTab(ALARMS);
 
-        reportAlarmTimeToServer();
-    }
-
-    private void reportAlarmTimeToServer ()
-    {
-        // TODO Move to another file, in order to make this functionality callable from here and from Alarm Activity.
-        // TODO Also, this file should implement OnConnectionFailedListener instead of this class
-        // TODO Also, this functionality should be inside an AsyncTask
-        // TODO Problem: if dismissing an alarm from a notification:
-        // TODO          no activity is launched => token is not refreshed => cannot update alarm time
-        // TODO Check if server auth code can help here... (getServerAuthCode())
-
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.server_client_id))
-                .requestServerAuthCode(getString(R.string.server_client_id))
-                .requestEmail()
-                .build();
-
-        // Build GoogleAPIClient with the Google Sign-In API and the above options.
-        GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this /* Activity */, this /* OnConnectionFailedListener */)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
-
-    private void handleSignInResult(GoogleSignInResult result)
-    {
-        if (result.isSuccess())
+        if (AuthHelper.getAuthHelper().getRefreshToken(this) == null)
         {
-            GoogleSignInAccount acct = result.getSignInAccount();
-            String idToken = acct.getIdToken();
-
-            SharedPreferences.Editor sharedPrefsEditor = Utils.getDefaultSharedPreferences(this).edit();
-            sharedPrefsEditor.putString("id_token", idToken);
-            sharedPrefsEditor.commit();
+            AuthHelper.getAuthHelper().signInAndGetRefreshToken(this, RC_SIGN_IN);
         }
-        else
-        {
-            // TODO do something meaningful here
-            throw new Error();
-
-        }
-    }
-
-    public void onConnectionFailed (ConnectionResult result) throws Error
-    {
-        // TODO implement (still needed now)
-        throw new Error();
     }
 
     @Override
@@ -610,13 +513,14 @@ public class DeskClock extends BaseActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Recreate the activity if any settings have been changed
         if (requestCode == SettingsMenuItemController.REQUEST_CHANGE_SETTINGS
-                && resultCode == RESULT_OK) {
+                && resultCode == RESULT_OK)
+        {
             mRecreateActivity = true;
         }
 
-        if (requestCode == RC_SIGN_IN) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleSignInResult(result);
+        if (requestCode == RC_SIGN_IN)
+        {
+            AuthHelper.getAuthHelper().handleSignInResult(this, data);
         }
 
     }

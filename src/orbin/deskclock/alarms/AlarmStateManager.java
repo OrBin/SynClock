@@ -182,9 +182,9 @@ public final class AlarmStateManager extends BroadcastReceiver {
         final AlarmInstance nextAlarm = getNextFiringAlarm(context);
 
         if (nextAlarm == null)
-            Sender.sendTimeToServer (0, null, context); // TODO add token
+            Sender.sendTimeToServerAsync(0, context);
         else
-            Sender.sendTimeToServer (nextAlarm.getAlarmTime().getTimeInMillis(), null, context); // TODO add token
+            Sender.sendTimeToServerAsync(nextAlarm.getAlarmTime().getTimeInMillis(), context);
 
         if (Utils.isPreL()) {
             updateNextAlarmInSystemSettings(context, nextAlarm);
@@ -282,9 +282,9 @@ public final class AlarmStateManager extends BroadcastReceiver {
         final AlarmInstance nextAlarm = getNextFiringAlarm(context);
 
         if (nextAlarm == null)
-            Sender.sendTimeToServer (0, null, context); // TODO add token
+            Sender.sendTimeToServerAsync(0, context);
         else
-            Sender.sendTimeToServer (nextAlarm.getAlarmTime().getTimeInMillis(), null, context); // TODO add token
+            Sender.sendTimeToServerAsync(nextAlarm.getAlarmTime().getTimeInMillis(), context);
 
         ContentResolver cr = context.getContentResolver();
         Alarm alarm = Alarm.getAlarm(cr, instance.mAlarmId);
