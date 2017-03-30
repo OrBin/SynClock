@@ -1,9 +1,6 @@
 rootProject.name = 'DeskClock'
 include ':app', ':httpclient-4.3.3'
 
-include ':android-opt-datetimepicker'
-project(':android-opt-datetimepicker').projectDir = new File(rootProject.projectDir, './datetimepicker')
-
 include ":messageformat"
 include ":support-design"
 include ":support-v7-appcompat"

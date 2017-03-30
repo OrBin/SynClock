@@ -20,7 +20,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.3'
+        classpath 'com.android.tools.build:gradle:2.3.0'
     }
 }
 
@@ -51,9 +51,7 @@ android {
     }
 
     dependencies {
-        compile (project(":android-opt-datetimepicker")) {
-            exclude module: "support-v4"
-        }
+        compile (project(":datetimepicker"))
 
         compile 'com.android.support:appcompat-v7:25.+'
         compile 'com.android.support:gridlayout-v7:25.+'
