@@ -3,71 +3,94 @@ package orbin;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import java.io.*;
+import java.io.IOException;
 import org.apache.http.*;
 import org.apache.http.client.*;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-/**
- * Created by Or Bin on 15/04/2016.
- */
 public class Sender {
 
-    private static String getSetTimePageUrl (Context context)
+    // The following two lines depend on the constant orbin.Path.BASE_PATH.
+    // It is declared in the file Path.java, which is git-ignored.
+    private static final String SET_TIME_PAGE_URL = Path.BASE_PATH + "/set";
+    private static final String AUTH_PAGE_URL = Path.BASE_PATH + "/auth/googletoken";
+    private static final String TAG = "Server updater";
+    private static final int    MAX_TRIES = 5;
+
+    private static boolean sendTimeToServer(long timeToWrite, Context context) throws IOException
     {
-        // This line depends on the constant orbin.Path.BASE_PATH.
-        // It is declared in the file Path.java, which is ignored by git.
-        return Path.BASE_PATH + "/set_time.php?time=";
-    }
+        AuthHelper.IdToken idToken = AuthHelper.getAuthHelper().getValidIdToken(context);
 
-    private static boolean writeTimeToServer (long timeToWrite, Context context) throws IOException
-    {
-
-        HttpClient httpclient = new DefaultHttpClient();
-        HttpGet httpget = new HttpGet(getSetTimePageUrl(context) + timeToWrite);
-
-        HttpResponse response = httpclient.execute(httpget);
-
-        if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK)
+        if (idToken == null)
         {
-            return false;
+            Log.e(TAG, "Could not send alarm time to server: id token is null");
         }
         else
         {
-            HttpEntity entity = response.getEntity();
+            String idTokenTokenValue = idToken.getTokenValue();
 
-            // Stream content out
-            BufferedReader bfrdInput = new BufferedReader(
-                    new InputStreamReader(
-                            entity.getContent(),
-                            "UTF-8"));
+            HttpClient httpClient = new DefaultHttpClient();
+            HttpGet httpGet = new HttpGet(AUTH_PAGE_URL + "?id_token=" + idTokenTokenValue);
+            HttpResponse response = httpClient.execute(httpGet);
+            int statusCode = response.getStatusLine().getStatusCode();
 
-            String strResponse = bfrdInput.readLine();
+            if (statusCode != HttpStatus.SC_OK)
+            {
+                if (statusCode == HttpStatus.SC_UNAUTHORIZED)
+                {
+                    AuthHelper.getAuthHelper().invalidateCurrentIdToken(context);
+                }
 
-            return ((strResponse != null) &&
-                    (strResponse.trim().equals("0")));
+                Log.e(TAG, "Could not send alarm time to server: failed to authenticate (" + statusCode + ")");
+            }
+            else
+            {
+                AuthHelper.getAuthHelper().invalidateCurrentIdToken(context);
+
+                httpGet = new HttpGet(SET_TIME_PAGE_URL + "?id_token=" + idTokenTokenValue + "&time=" + timeToWrite);
+                response = httpClient.execute(httpGet);
+                statusCode = response.getStatusLine().getStatusCode();
+
+                if (statusCode != HttpStatus.SC_OK)
+                    Log.e(TAG, "Could not send alarm time to server: failed to send to server (" + statusCode + ")");
+                else
+                    return true;
+            }
         }
+
+        return false;
     }
 
-    public static void sendTimeToServer (long timeToWrite, final Context context)
+    public static void sendTimeToServerAsync(final long timeToWriteMillis, final Context context)
     {
-        new AsyncTask<Long, Void, Boolean> ()
+        new AsyncTask<Void, Void, Void> ()
         {
             @Override
-            protected Boolean doInBackground(Long... arg0)
+            protected Void doInBackground(Void... arg0)
             {
-                try
+                for (int numOfTries = 0; numOfTries < MAX_TRIES; numOfTries++)
                 {
-                    return writeTimeToServer(arg0[0], context);
+                    try
+                    {
+                        if (sendTimeToServer(timeToWriteMillis / 1000, context))
+                        {
+                            Log.i(TAG, "Sent alarm time to server successfully");
+                            break;
+                        }
+                        else
+                        {
+                            Log.e(TAG, "Could not send alarm time to server (try " + numOfTries + " of " + MAX_TRIES + ")");
+                        }
+                    }
+                    catch (IOException ex)
+                    {
+                        Log.e(TAG, "Could not send alarm time to server: IOException thrown (try " + numOfTries + " of " + MAX_TRIES + ")");
+                    }
                 }
-                catch (Exception ex)
-                {
-                    ex.printStackTrace();
-                    return false;
-                }
-            }
 
-        }.execute(timeToWrite / 1000);
+                return null;
+            }
+        }.execute();
     }
 }

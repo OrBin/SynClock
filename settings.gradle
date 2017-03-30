@@ -1,5 +1,3 @@
-
-
 rootProject.name = 'DeskClock'
 include ':app', ':httpclient-4.3.3'
 

@@ -57,6 +57,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import orbin.AuthHelper;
 import orbin.deskclock.actionbarmenu.MenuItemControllerFactory;
 import orbin.deskclock.actionbarmenu.NightModeMenuItemController;
 import orbin.deskclock.actionbarmenu.OptionsMenuManager;
@@ -92,6 +93,8 @@ import static orbin.deskclock.uidata.UiDataModel.Tab.ALARMS;
  */
 public class DeskClock extends BaseActivity
         implements FabContainer, LabelDialogFragment.AlarmLabelDialogHandler {
+
+    private static final int RC_SIGN_IN = 9002;
 
     /** The Uri to the settings entry that stores alarm stream volume. */
     private static final Uri VOLUME_URI = Uri.withAppendedPath(CONTENT_URI, "volume_alarm_speaker");
@@ -307,6 +310,11 @@ public class DeskClock extends BaseActivity
         }
 
         UiDataModel.getUiDataModel().setSelectedTab(ALARMS);
+
+        if (AuthHelper.getAuthHelper().getRefreshToken(this) == null)
+        {
+            AuthHelper.getAuthHelper().signInAndGetRefreshToken(this, RC_SIGN_IN);
+        }
     }
 
     @Override
@@ -504,8 +512,14 @@ public class DeskClock extends BaseActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Recreate the activity if any settings have been changed
         if (requestCode == SettingsMenuItemController.REQUEST_CHANGE_SETTINGS
-                && resultCode == RESULT_OK) {
+                && resultCode == RESULT_OK)
+        {
             mRecreateActivity = true;
+        }
+
+        if (requestCode == RC_SIGN_IN)
+        {
+            AuthHelper.getAuthHelper().handleSignInResult(this, data);
         }
     }
 

@@ -19,8 +19,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="orbin.deskclock"
-    android:versionCode="452"
-    android:versionName="4.5.2">
+    android:versionCode="453"
+    android:versionName="4.5.3">
 
     <original-package android:name="orbin.alarmclock" />
     <original-package android:name="orbin.deskclock" />
