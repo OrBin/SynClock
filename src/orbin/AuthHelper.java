@@ -135,7 +135,7 @@ public class AuthHelper implements GoogleApiClient.OnConnectionFailedListener
                                 "redirect_uri=" + URLEncoder.encode(callerActivity.getString(R.string.redirect_uri), "UTF-8") + "&" +
                                 "grant_type=authorization_code";
 
-                        HttpEntity entity = new StringEntity(postBody);//ByteArrayEntity(postBodyBytes);
+                        HttpEntity entity = new StringEntity(postBody);
                         httpPost.setEntity(entity);
 
                         httpPost.addHeader("Content-Type", "application/x-www-form-urlencoded");

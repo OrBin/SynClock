@@ -92,8 +92,7 @@ import static orbin.deskclock.uidata.UiDataModel.Tab.ALARMS;
  * clocks, timers and a stopwatch.
  */
 public class DeskClock extends BaseActivity
-        implements FabContainer,
-                   LabelDialogFragment.AlarmLabelDialogHandler {
+        implements FabContainer, LabelDialogFragment.AlarmLabelDialogHandler {
 
     private static final int RC_SIGN_IN = 9002;
 
@@ -522,7 +521,6 @@ public class DeskClock extends BaseActivity
         {
             AuthHelper.getAuthHelper().handleSignInResult(this, data);
         }
-
     }
 
     /**
